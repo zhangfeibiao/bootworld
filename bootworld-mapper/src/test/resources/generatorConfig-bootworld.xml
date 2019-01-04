@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<!--生成文件命令: mybatis-generator:generate -->
+<generatorConfiguration>
+
+	<!-- MyBatis3Simple：不生成 Example相关类及方法 -->
+	<context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+
+		<property name="beginningDelimiter" value="`" />
+		<property name="endingDelimiter" value="`" />
+		<property name="javaFileEncoding" value="UTF-8" />
+		<!-- 指定生成 Mapper 的继承模板 -->
+		<plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+			<property name="mappers" value="tk.mybatis.mapper.common.Mapper" />
+		</plugin>
+
+		<!-- 生成 JavaBean 对象重写 toString方法 -->
+		<plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+
+		<!-- 生成 JavaBean 对象继承 Serializable 类 -->
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+		<plugin type="com.zfb.bootworld.plugin.XmloverridePluginAdapter"></plugin>
+
+		<commentGenerator type="com.zfb.bootworld.plugin.MybatisCommentGenerator">
+			<property name="suppressDate" value="true" />
+			<property name="suppressAllComments" value="false" />
+			<property name="addRemarkComments" value="true" />
+		</commentGenerator>
+
+
+		<!-- jdbc 连接配置 -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+						connectionURL="jdbc:mysql://localhost:3306/boot_world" userId="root" password="">
+
+			<property name="remarks" value="true" />
+			<property name="remarksReporting" value="true" />
+			<property name="useInformationSchema" value="true" />
+
+		</jdbcConnection>
+
+		<!-- javabeen生成的地方 -->
+		<javaModelGenerator targetProject="src/main/java"
+							targetPackage="com.zfb.bootworld.entity">
+			<property value="false" name="enableSubPackages" />
+			<property value="true" name="trimStrings" />
+		</javaModelGenerator>
+
+
+		<!-- mapper.xml生成的地方 -->
+		<sqlMapGenerator targetProject="src/main/resources"
+						 targetPackage="com.zfb.bootworld.mapper">
+			<property value="false" name="enableSubPackages" />
+		</sqlMapGenerator>
+
+		<!-- mapper生成的地方 -->
+		<javaClientGenerator targetProject="src/main/java"
+							 targetPackage="com.zfb.bootworld.mapper" type="XMLMAPPER">
+			<property value="false" name="enableSubPackages" />
+		</javaClientGenerator>
+
+		<!--表名-->
+		<table tableName="sys_permission">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
+			<columnOverride column="is_permanent" javaType="java.lang.Integer"></columnOverride>
+		</table>
+		<table tableName="sys_permission_role">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
+			<columnOverride column="is_permanent" javaType="java.lang.Integer"></columnOverride>
+		</table>
+		<table tableName="sys_role">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
+			<columnOverride column="is_permanent" javaType="java.lang.Integer"></columnOverride>
+		</table>
+		<table tableName="sys_user">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
+			<columnOverride column="is_permanent" javaType="java.lang.Integer"></columnOverride>
+		</table>
+		<table tableName="sys_user_role">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
+			<columnOverride column="is_permanent" javaType="java.lang.Integer"></columnOverride>
+		</table>
+
+	</context>
+
+</generatorConfiguration>
