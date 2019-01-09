@@ -1,12 +1,13 @@
 package com.zfb.bootworld.system.config;
 
-import com.zfb.bootworld.system.security.AuthUserDetailsServiceImpl;
+import com.zfb.bootworld.system.security.CustomUserDetailsService;
 import com.zfb.bootworld.system.security.AuthenticationFailure;
 import com.zfb.bootworld.system.security.AuthenticationSuccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,37 +23,35 @@ import org.springframework.security.web.context.SecurityContextRepository;
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    //引入成功与失败的处理类
     @Autowired
     private AuthenticationSuccess authenticationSuccess;
+
     @Autowired
     private AuthenticationFailure authenticationFailure;
+
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         // 密码加密方法;
         return new BCryptPasswordEncoder();
     }
-    //注入封装账号信息的处理bean
-    @Bean
-    UserDetailsService detailsService() {
-        return new AuthUserDetailsServiceImpl();
-    }
 
-    //配置不拦截的静态资源请求
     @Override
     public void configure(WebSecurity web) throws Exception {
         // TODO Auto-generated method stub
-        web.ignoring().antMatchers("/css/", "/img/", "/js/**");
+        web.ignoring().antMatchers("/css/**", "/img/**", "/js/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
          http.authorizeRequests()
          //antMatchers无需权限 即可访问，permitAll面向全部用户开放
-        .antMatchers("/login").permitAll()
+        .antMatchers("/login","/swagger-ui.html").permitAll()
         //除了antmatchers中的例外，其他任何请求都需要权限认证
         .anyRequest().authenticated()
         //formlogin登录配置,and()是链接符，and之间的内容有相同的作用域
@@ -71,13 +70,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      //设置用户信息获取方法，获取方法是自定义的实现security提供的接口即可
      //就是通过自定义接口实现获取业务用户的信息包括用户名，密码，权限，交给security处理
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {    auth.userDetailsService(detailsService()).passwordEncoder(passwordEncoder());
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService()).passwordEncoder(new BCryptPasswordEncoder() {
+            @Override
+            public String encode(CharSequence charSequence) {
+                return charSequence.toString();
+            }
+
+            @Override
+            public boolean matches(CharSequence charSequence, String s) {
+                return s.equals(charSequence.toString());
+            }
+        });
     }
     @Bean
     public SecurityContextRepository securityContextRepository() {
       //设置对spring security的UserDetails进行session保存,这个必须要有，不然不会保存至session对应的缓存redis中
-        HttpSessionSecurityContextRepository httpSessionSecurityContextRepository =
-            new HttpSessionSecurityContextRepository();
+        HttpSessionSecurityContextRepository httpSessionSecurityContextRepository = new HttpSessionSecurityContextRepository();
         return httpSessionSecurityContextRepository;
     }
 }

@@ -23,7 +23,7 @@ import java.util.Set;
 
 @Slf4j
 @Component
-public class AuthUserDetailsServiceImpl implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserService userService;

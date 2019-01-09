@@ -1,14 +1,14 @@
 package com.zfb.bootworld;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * @author  zhangfeibiao
  */
+@MapperScan({"com.zfb.bootworld.**.mapper"})
 @SpringBootApplication
 public class BootWorldApplication {
 
