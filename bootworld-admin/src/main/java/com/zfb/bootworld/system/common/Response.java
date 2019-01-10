@@ -22,6 +22,7 @@ public class Response<T> implements Serializable {
     private String errorCode;
     private String errorMsg;
     private T data;
+    private String traceId;
 
     public Response() {
     }

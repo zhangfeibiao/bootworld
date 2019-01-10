@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // TODO Auto-generated method stub
-        web.ignoring().antMatchers("/css/**", "/img/**", "/js/**");
+        web.ignoring().antMatchers("/static/**");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //formlogin登录配置,and()是链接符，and之间的内容有相同的作用域
         .and().formLogin().loginPage("/login")
         .successHandler(authenticationSuccess)//登陆成功处理
-        .failureHandler(authenticationFailure)//登录失败的处理
+        // .failureHandler(authenticationFailure)//登录失败的处理
         //登录验证处理请求，请求逻辑是security内置的，此处只设置自己喜欢的请求就可以了，然后在表单中提交的请求要与此处设置的一致即可
         .loginProcessingUrl("/login")
        //设置security内置的请求表单元素的name名称，此处设置的要与登录表单的用户名密码的name一致 .usernameParameter("loginname").passwordParameter("password").permitAll()
@@ -71,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      //就是通过自定义接口实现获取业务用户的信息包括用户名，密码，权限，交给security处理
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService()).passwordEncoder(new BCryptPasswordEncoder() {
+        auth.userDetailsService(userDetailsService).passwordEncoder(new PasswordEncoder() {
             @Override
             public String encode(CharSequence charSequence) {
                 return charSequence.toString();

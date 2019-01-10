@@ -4,12 +4,13 @@ server:
 #        max-threads: 1000
 #        min-spare-threads: 30
   port: 80
-#  context-path: /bootworld
+  context-path: /bootworld
 #    uri-encoding: utf-8
+logging.level.com.zfb.bootworld.**.mapper: debug
 
 spring:
   thymeleaf:
-    mode: LEGACYHTML5
+    mode: HTML
     cache: false
     check-template: true
     check-template-location: true
@@ -57,7 +58,19 @@ security:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-  mapper-locations: com/zfb/bootworld/mapper/*Mapper.xml
-  typeAliasesPackage: com.zfb.bootworld.**.mapper
+#  mapperLocations: classpath*:com/zfb/bootworld/**/mapper/*.xml
+  mapper-locations: classpath:com.zfb.bootworld/**/*Mapper.xml
+  typeAliasesPackage: com.zfb.bootworld.entity
+#mappers 多个接口时逗号隔开
+mapper:
+  mappers: tk.mybatis.mapper.common.Mapper,tk.mybatis.mapper.common.special.InsertListMapper
+  not-empty: false
+  identity: MYSQL
+#pagehelper分页插件配置
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
 #[弃用]配置缓存和session存储方式，默认ehcache,可选redis,[弃用]调整至 spring cache type【shiro.用户，权限，session，spring.cache通用】
 #[弃用]cacheType: ehcache

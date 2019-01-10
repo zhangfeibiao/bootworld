@@ -1,15 +1,10 @@
 package com.zfb.bootworld.system.controller;
 
-import lombok.Data;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
-import java.io.Serializable;
 
 /**
  * @Author: zhangfeibiao
@@ -35,7 +30,8 @@ public class LoginController {
     @PostMapping("/login")
     @ResponseBody
    public void ajaxLogin(String username, String password) {
-
+        System.out.println(username);
+        System.out.println(password);
 
     }
 

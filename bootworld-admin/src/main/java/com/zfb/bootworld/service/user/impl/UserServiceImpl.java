@@ -2,8 +2,8 @@ package com.zfb.bootworld.service.user.impl;
 
 import com.zfb.bootworld.entity.SysUser;
 import com.zfb.bootworld.mapper.SysUserMapper;
-import com.zfb.bootworld.service.user.UserService;
 import com.zfb.bootworld.service.user.mapper.UserServiceMapper;
+import com.zfb.bootworld.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
         param.setUsername(userName);
 
         // SysUser sysUser = sysUserMapper.selectOne(param);
-        final SysUser sysUser = userMapper.getUserLoginByName(param);
+         SysUser sysUser = userMapper.getUserLoginByName(param);
 
         return sysUser;
     }

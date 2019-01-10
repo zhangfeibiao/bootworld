@@ -17,7 +17,7 @@ public class AuthenticationFailure implements AuthenticationFailureHandler {
                                         AuthenticationException exception) throws IOException, ServletException {
         String meg="登录失败";
         //重定向到失败页面
-        request.getRequestDispatcher("/authority/login?meg="+meg).forward(request, response);
+        request.getRequestDispatcher("/login?meg="+meg).forward(request, response);
     }
 
 }
