@@ -5,10 +5,9 @@
 
   <select id="getUserLoginByName" resultType="com.zfb.bootworld.entity.SysUser">
 
-
 		select
 		*
 			from sys_user
 		where username = #{username}
-  </select>
+	</select>
 </mapper>

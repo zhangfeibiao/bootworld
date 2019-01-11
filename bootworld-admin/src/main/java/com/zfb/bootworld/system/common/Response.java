@@ -43,6 +43,10 @@ public class Response<T> implements Serializable {
         return new Response(1, null, null, data);
     }
 
+    public static <T> Response<T> failure(T data) {
+        return new Response(0, null, null, data);
+    }
+
     public static <T> Response failure(ErrorCodeEnum errorCodeEnum) {
         return new Response(0, errorCodeEnum.getErrorCode(), errorCodeEnum.getErrorMsg(), "FAILURE");
     }

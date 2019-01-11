@@ -3,6 +3,7 @@ package com.zfb.bootworld.system.security;
 import com.zfb.bootworld.entity.SysUser;
 import com.zfb.bootworld.service.permission.PermissionService;
 import com.zfb.bootworld.service.user.UserService;
+import com.zfb.bootworld.system.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -40,18 +41,14 @@ public class CustomUserDetailsService implements UserDetailsService {
      * @throws UsernameNotFoundException
      */
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userName){
 
 
         // 通过业务账号获取业务系统的用户信息
         SysUser userLogin = userService.getUserLoginByName(userName);
 
         if (userLogin == null) {
-            throw new BadCredentialsException("用户名或密码错误");
-        }
-
-        if (0 != userLogin.getDisabled()) {
-            throw new DisabledException("用户被禁用");
+            throw new BadCredentialsException("用户名不存在");
         }
 
         Set<String> perms = permissionService.listPermissionByUserId(userLogin.getId());
@@ -59,12 +56,15 @@ public class CustomUserDetailsService implements UserDetailsService {
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         if (!CollectionUtils.isEmpty(perms)) {
             perms.stream().filter(n -> n != null).forEach(perm -> {
-                GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(perm);
+                GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("system:/login");
                 grantedAuthorities.add(grantedAuthority);
 
             });
 
         }
+
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("system:/login");
+        grantedAuthorities.add(grantedAuthority);
 
         //将业务系统的用户信息以及权限信息封装到security的用户实体中
         return new User(userLogin.getUsername(), userLogin.getPassword(), grantedAuthorities);

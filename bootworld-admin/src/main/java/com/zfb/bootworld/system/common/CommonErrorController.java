@@ -2,14 +2,13 @@ package com.zfb.bootworld.system.common;
 
 
 import com.zfb.bootworld.system.enums.ErrorCodeEnum;
-import com.zfb.bootworld.system.exception.BusinessException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,10 +23,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
@@ -94,9 +90,8 @@ public class CommonErrorController extends AbstractErrorController {
     }
 
     protected Exception getError(HttpServletRequest request) {
-        RequestAttributes requestAttributes = new ServletRequestAttributes(request);
-        WebRequest webRequest = (WebRequest) requestAttributes;
-        return (Exception) this.errorAttributes.getError(webRequest);
+        ServletWebRequest requestAttributes = new ServletWebRequest(request);
+        return (Exception) this.errorAttributes.getError(requestAttributes);
     }
 
     @ResponseBody

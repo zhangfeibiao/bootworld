@@ -2,6 +2,7 @@ package com.zfb.bootworld.test.user;
 
 import com.zfb.bootworld.entity.SysUser;
 import com.zfb.bootworld.service.user.UserService;
+import com.zfb.bootworld.system.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +29,8 @@ public class UserServiceTest {
         param.setUsername("test");
         SysUser user = userService.getUserLoginByName("test");
         System.out.println(user);
+
+        throw new BusinessException("自定义异常");
 
     }
 }

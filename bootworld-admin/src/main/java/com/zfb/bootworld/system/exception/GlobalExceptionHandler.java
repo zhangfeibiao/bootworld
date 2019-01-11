@@ -3,6 +3,7 @@ package com.zfb.bootworld.system.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -80,6 +81,36 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BusinessException.class)
     public void error(HttpServletRequest request, HttpServletResponse response, BusinessException ex) throws ServletException, IOException {
+
+        request.setAttribute("javax.servlet.error.status_code", 200);
+        request.setAttribute("javax.servlet.error.exception", ex);
+        request.getRequestDispatcher(this.errorPath).forward(request, response);
+    }
+
+/**
+     * 转发异常至统一处理，避免日志记录ERROR级别的业务异常
+     * @param request
+     * @param response
+     * @param ex
+     * @throws ServletException
+     * @throws IOException
+     */
+    @ExceptionHandler(BadCredentialsException.class)
+    public void error(HttpServletRequest request, HttpServletResponse response, BadCredentialsException ex) throws ServletException, IOException {
+
+        request.setAttribute("javax.servlet.error.status_code", 200);
+        request.setAttribute("javax.servlet.error.exception", ex);
+        request.getRequestDispatcher(this.errorPath).forward(request, response);
+    }/**
+     * 转发异常至统一处理，避免日志记录ERROR级别的业务异常
+     * @param request
+     * @param response
+     * @param ex
+     * @throws ServletException
+     * @throws IOException
+     */
+    @ExceptionHandler(Exception.class)
+    public void error(HttpServletRequest request, HttpServletResponse response, Exception ex) throws ServletException, IOException {
 
         request.setAttribute("javax.servlet.error.status_code", 200);
         request.setAttribute("javax.servlet.error.exception", ex);

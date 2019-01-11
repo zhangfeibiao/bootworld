@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
         param.setUsername(userName);
 
         // SysUser sysUser = sysUserMapper.selectOne(param);
-        final SysUser sysUser = userMapper.getUserLoginByName(param);
+         SysUser sysUser = userMapper.getUserLoginByName(param);
 
         return sysUser;
     }

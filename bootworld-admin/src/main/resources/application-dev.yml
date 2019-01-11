@@ -5,7 +5,16 @@ bootdo:
 logging:
   level:
     root: info
-    com.bootdo: debug
+    druid.sql.DataSource: DEBUG
+    druid.sql.Connection: DEBUG
+    druid.sql.Statement: DEBUG
+    druid.sql.ResultSet: DEBUG
+    java.sql: DEBUG
+    com.ibatis: DEBUG
+    com.ibatis.common.jdbc.ScriptRunner: INFO
+    com.ibatis.common.jdbc.SimpleDataSource: INFO
+    org.springframework.web: DEBUG
+    com.zfb.bootworld: debug
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
